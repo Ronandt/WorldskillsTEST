@@ -15,7 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMyCaloriesScreen(navController: NavController)   {
+fun AddMyCaloriesScreen(navController: NavController, screenState: ScreenState, onChangeScreenState: (ScreenState) -> Unit)   {
     androidx.compose.material.Scaffold(bottomBar = {
       NavBar(navController = navController)
     }) {

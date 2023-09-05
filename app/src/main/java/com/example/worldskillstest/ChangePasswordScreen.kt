@@ -29,11 +29,13 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,12 +57,12 @@ import org.json.JSONObject
 @SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ChangePasswordScreen(navController: NavController) {
-    var oldPassword by remember { mutableStateOf("")}
-    var newPassword by remember { mutableStateOf("")}
-    var confirmNewPassword by remember { mutableStateOf("")}
+fun ChangePasswordScreen(navController: NavController, screenState: ScreenState, onChangeScreenState: (ScreenState) -> Unit) {
+    var oldPassword by rememberSaveable { mutableStateOf("")}
+    var newPassword by rememberSaveable { mutableStateOf("")}
+    var confirmNewPassword by rememberSaveable { mutableStateOf("")}
     var modalState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden )
-
+    var scaffoldState = rememberScaffoldState()
         Scaffold(topBar = {
             TopAppBar(backgroundColor = Red, elevation = 0.dp) {
 
@@ -101,12 +104,14 @@ fun ChangePasswordScreen(navController: NavController) {
                     val context = LocalContext.current
                     Button(onClick = {
                         scope.launch {
+                            onChangeScreenState(ScreenState.Loading)
                             var response: JSONObject? =  SharedPreferenceResolver(context).getUserSession()?.getString("accountid")
                                 ?.let { it1 ->
                                    WorldSkillsAPI.changePassword(oldPassword, newPassword, confirmNewPassword,
                                         it1
                                     )
                                 }
+                            onChangeScreenState(ScreenState.Done)
                             Toast.makeText(context, response?.getJSONObject("result")?.getString("message"), Toast.LENGTH_LONG).show()
 
                         }
@@ -127,8 +132,8 @@ Spacer(modifier = Modifier.height(10.dp))
 
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, device = Devices.NEXUS_7)
 @Composable
 fun P() {
-    ChangePasswordScreen(navController = rememberNavController())
+   ChangePasswordScreen(navController = rememberNavController(), ScreenState.Done, {})
 }

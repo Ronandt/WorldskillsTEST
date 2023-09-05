@@ -77,7 +77,7 @@ import org.json.JSONObject
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MyProfileScreen(navController: NavController) {
+fun MyProfileScreen(navController: NavController, screenState: ScreenState, onChangeScreenState: (ScreenState) -> Unit) {
     val context = LocalContext.current
     var session = SharedPreferenceResolver(context)
     var userInformation by remember { mutableStateOf(JSONObject().apply {
@@ -283,5 +283,5 @@ fun MyProfileScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun C() {
-    MyProfileScreen(navController = rememberNavController())
+   // MyProfileScreen(navController = rememberNavController(), screenState: ScreenState, onChangeScreenState: (ScreenState) -> Unit)
 }

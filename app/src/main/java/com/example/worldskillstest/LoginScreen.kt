@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,10 +39,10 @@ import com.example.worldskillstest.ui.theme.Red
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, screenState: ScreenState, onChangeScreenState: (ScreenState) -> Unit) {
     var scope = rememberCoroutineScope()
-    var email by remember { mutableStateOf("devops2@worldskills.sg")}
-    var password by remember { mutableStateOf("P@ssw0rd")}
+    var email by rememberSaveable { mutableStateOf("")}
+    var password by rememberSaveable { mutableStateOf("")}
     //var isEmail by remember {mutableStateOf(false)}
     var firstTime by remember {mutableStateOf(true)}
     Column(modifier = Modifier
@@ -64,6 +65,7 @@ fun LoginScreen(navController: NavController) {
 
         Button(onClick = {
             scope.launch {
+                onChangeScreenState(ScreenState.Loading)
                 if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     Toast.makeText(context, "Invalid email", Toast.LENGTH_LONG).show()
                 } else {
@@ -75,6 +77,7 @@ fun LoginScreen(navController: NavController) {
                         navController.navigate("colorMyDiet")
                     }
                 }
+                onChangeScreenState(ScreenState.Done)
 
             }
 

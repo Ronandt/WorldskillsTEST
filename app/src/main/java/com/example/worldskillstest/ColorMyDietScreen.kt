@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 @Composable
-fun ColorMyDietScreen(navController: NavController) {
+fun ColorMyDietScreen(navController: NavController, screenState: ScreenState, onChangeScreenState: (ScreenState) -> Unit) {
     androidx.compose.material.Scaffold(bottomBar = {
         NavBar(navController = navController)
     }) {

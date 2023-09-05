@@ -42,6 +42,9 @@ object WorldSkillsAPI {
                     requestMethod =  "POST"
                     doOutput = true
                     doInput = true
+                    connectTimeout = 5000
+                    readTimeout = 5000
+
 
                     setRequestProperty("Content-Type", "application/json")
                     setRequestProperty("accept", "application/json")

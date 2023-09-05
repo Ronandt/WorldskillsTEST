@@ -32,7 +32,7 @@ import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraScreen(navController: NavController, activity: MainActivity, baseContext: Context){
+fun CameraScreen(navController: NavController, activity: MainActivity, baseContext: Context, screenState: ScreenState, onChangeScreenState: (ScreenState) -> Unit){
     var perms = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) {
         if(!it) {
             Toast.makeText(baseContext, "We need camera for you to take an image", Toast.LENGTH_LONG).show()
