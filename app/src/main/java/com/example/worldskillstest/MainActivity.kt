@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.worldskillstest.ui.theme.Red
 import com.example.worldskillstest.ui.theme.WorldskillsTESTTheme
@@ -52,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
             var screenState by rememberSaveable { mutableStateOf(ScreenState.Done)}
             var navController = rememberNavController()
-            var destination = navController.currentBackStackEntry?.destination?.route
+            var destination = navController.currentBackStackEntryAsState()?.value?.destination?.route
 
             timer = remember {object: CountDownTimer(60000, 1000) {
                 override fun onTick(p0: Long) {
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
             }}
             LaunchedEffect(key1 = destination) {
-                if(destination == "login" || destination == null) {
+                if(destination == "login") {
                     loginCheck = "login"
                     timer.cancel()
 
