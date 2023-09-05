@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
 
                 override fun onFinish() {
                    SharedPreferenceResolver(applicationContext).clearUserSession()
+                    navController.navigate("login")
                 }
 
             }}
