@@ -1,6 +1,7 @@
 package com.example.worldskillstest
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -13,6 +14,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +29,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.worldskillstest.ui.theme.Red
 import com.example.worldskillstest.ui.theme.WorldskillsTESTTheme
+import kotlinx.coroutines.flow.collect
+
 //169.254.73.126:8000
 //2
 
@@ -34,12 +38,42 @@ enum class ScreenState {
     Done,
     Loading
 }
+
+fun countdownCallback(onFinish: () -> Unit) {
+
+}
 class MainActivity : ComponentActivity() {
+    private lateinit var timer: CountDownTimer
+    var loginCheck by mutableStateOf("login")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+
             var screenState by rememberSaveable { mutableStateOf(ScreenState.Done)}
             var navController = rememberNavController()
+            var destination = navController.currentBackStackEntry?.destination?.route
+
+            timer = remember {object: CountDownTimer(60000, 1000) {
+                override fun onTick(p0: Long) {
+                   println(p0)
+                }
+
+                override fun onFinish() {
+                   SharedPreferenceResolver(applicationContext).clearUserSession()
+                }
+
+            }}
+            LaunchedEffect(key1 = destination) {
+                if(destination == "login" || destination == null) {
+                    loginCheck = "login"
+                    timer.cancel()
+
+                } else {
+                    println(destination)
+                    loginCheck = "others"
+                }
+            }
             WorldskillsTESTTheme {
                 Box() {
 
@@ -65,14 +99,26 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     AnimatedVisibility(visible = screenState != ScreenState.Done) {
-                        LinearProgressIndicator(color = Red, modifier = Modifier.fillMaxWidth().align(
-                            Alignment.TopCenter))
+                        LinearProgressIndicator(color = Red, modifier = Modifier
+                            .fillMaxWidth()
+                            .align(
+                                Alignment.TopCenter
+                            ))
                     }
                 }
 
 
             }
         }
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        if(loginCheck != "login") {
+            timer.cancel()
+            timer.start()
+        }
+
     }
 }
 
