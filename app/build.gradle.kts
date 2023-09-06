@@ -70,6 +70,7 @@ dependencies {
     implementation("androidx.compose.material:material:1.5.0")
     implementation("androidx.navigation:navigation-compose:2.7.0")
     implementation("com.squareup.retrofit2:retrofit:2.4.0")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0-alpha03")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("com.squareup.moshi:moshi:1.14.0")
@@ -90,4 +91,15 @@ dependencies {
     // If you want to additionally use the CameraX View class
     implementation("androidx.camera:camera-view:${camerax_version}")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+
+
+    var room_version = "2.5.2"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$room_version")
+    // To use Kotlin Symbol Processing (KSP)
+
 }

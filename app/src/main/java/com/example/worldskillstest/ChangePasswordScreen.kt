@@ -68,7 +68,7 @@ fun ChangePasswordScreen(navController: NavController, screenState: ScreenState,
 
                     Box(modifier = Modifier.fillMaxSize()) {
                         IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "bACK", tint = Color.White, modifier = Modifier
+                            Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Back", tint = Color.White, modifier = Modifier
                                 .size(30.dp)
                                 .align(
                                     Alignment.CenterStart
