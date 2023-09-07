@@ -42,6 +42,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Integer.parseInt
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +70,7 @@ fun AddingCaloriesScreen(navController: NavController, name: String, calories: S
                     Spacer(modifier = Modifier.height(20.dp))
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)){
                         MainTextField(value =  "", onValueChange = {itemName = ""}, label = itemName, readonly = true)
-                        calories?.let { it1 -> MainTextField(value = "",  onValueChange = {},label = it1, readonly = true) }
+                        calories?.let { it1 -> MainTextField(value = "",  onValueChange = {},label = it1.split(".")[0] + "Cal", readonly = true) }
                         Column(modifier = Modifier.clickable {
                             openDatePicker = !openDatePicker
                         }) {
@@ -78,7 +81,7 @@ fun AddingCaloriesScreen(navController: NavController, name: String, calories: S
                         }
 
                     }
-                    Text(hexData)
+
                     if(openDatePicker) {
                         AndroidView(factory = {
                             return@AndroidView DatePicker(it).apply {
@@ -96,7 +99,8 @@ fun AddingCaloriesScreen(navController: NavController, name: String, calories: S
                     Button(onClick = {
                         scope.launch {
                             withContext(Dispatchers.IO) {
-                                calories?.let { it1 -> FoodItem(name = name, calories = it1, date = date, hex =hexData ) }
+                                calories?.let { it1 -> FoodItem(name = name, calories = it1, date = if(date == "") Instant.ofEpochMilli(System.currentTimeMillis()).atZone(
+                                    ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))else date, hex =hexData ) }
                                     ?.let { it2 ->
                                         Db.getInstance(context).foodItemDao().insertFoodItem(it2)
                                     }

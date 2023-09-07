@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -41,10 +44,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(navController: NavController, screenState: ScreenState, onChangeScreenState: (ScreenState) -> Unit) {
     var scope = rememberCoroutineScope()
-    var email by rememberSaveable { mutableStateOf("")}
-    var password by rememberSaveable { mutableStateOf("")}
+    var email by rememberSaveable { mutableStateOf("devops2@worldskills.sg")}
+    var password by rememberSaveable { mutableStateOf("P@ssw0rd")}
     //var isEmail by remember {mutableStateOf(false)}
     var firstTime by remember {mutableStateOf(true)}
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp), horizontalAlignment =  Alignment.CenterHorizontally) {
